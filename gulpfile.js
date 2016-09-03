@@ -1,19 +1,20 @@
 //导入gulp模块
 var gulp = require('gulp');
-//桔子
-gulp.task('orange',function(){
-   console.log('桔子');
+var $ = require('gulp-load-plugins')();
+gulp.task('copy',function(){
+    gulp.src('./src/**/*')
+        .pipe(gulp.dest('./dist')).pipe($.connect.reload());
 });
 
-//锅
-gulp.task('pan',function(cb){
-  setTimeout(function(){
-     console.log('锅');
-     cb();
-  },3000);
+gulp.task('watch',function(){
+    gulp.watch('./src/index.html',['copy']);
 });
 
-//锅
-gulp.task('炒',['orange','pan'],function(){
-   console.log('炒')
+gulp.task('server',function(){
+    $.connect.server({
+        root:'./dist',
+        port:8080,
+        livereload:true
+    })
 });
+gulp.task('default',['server','watch']);
